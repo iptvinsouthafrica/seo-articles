@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Articles</title>
+</head>
+<body>
+  <h1>SEO Articles</h1>
+
+  <form id="articleForm">
+    <input
+      id="title"
+      type="text"
+      placeholder="Article title"
+      required
+    >
+
+    <textarea
+      id="content"
+      placeholder="Article content"
+      required
+    ></textarea>
+
+    <button type="submit">Send article</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbyHXzRbxT3kV4X0BMYEMb15jfKLCFtxM5cJ0gH68f_ngcYu8ZP2fI9bxlREjehYsZBv/exec";
+
+    const form = document.getElementById("articleForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const data = {
+        title: document.getElementById("title").value,
+        content: document.getElementById("content").value
+      };
+
+      message.textContent = "Sending...";
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          message.textContent = "Article sent successfully";
+          form.reset();
+        } else {
+          message.textContent = "An error occurred";
+        }
+      } catch (error) {
+        console.error(error);
+        message.textContent = "Connection error";
+      }
+    });
+  </script>
+</body>
+</html>
